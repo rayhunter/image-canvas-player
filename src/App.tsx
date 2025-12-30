@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const [speed, setSpeed] = useState(60); // animation duration slider
   const [delay, setDelay] = useState(40); // delay between images slider
   const [shade, setShade] = useState(20); // shade overlay 0–100
+  const [volume, setVolume] = useState(50); // audio volume 0–100
 
   // -------- Image upload --------
   const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (
@@ -84,6 +85,13 @@ const App: React.FC = () => {
       audioRef.current.pause();
     }
   };
+
+  // -------- Update audio volume --------
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
 
   // -------- Canvas resize --------
   useEffect(() => {
@@ -279,6 +287,16 @@ const App: React.FC = () => {
           <button className="btn" onClick={handleToggleAudio}>
             Play / Pause Audio
           </button>
+          <label className="slider-label">
+            <span>Volume</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={volume}
+              onChange={(e) => setVolume(Number(e.target.value))}
+            />
+          </label>
           <audio ref={audioRef} />
         </section>
 
